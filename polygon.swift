@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Main
 
 struct Polygon: Sendable {
     private let apiKey: String
@@ -17,8 +18,9 @@ struct Polygon: Sendable {
         self.stocks = Stocks(apiKey: apiKey)
     }
     
-    
 }
+
+//Security Types
 
 struct Stocks {
     private let apiKey: String
@@ -94,16 +96,43 @@ struct DailyOpenClose: Path {
     private let date: String
     private var adjusted = true
     
+    init(ticker: String, date: String, adjusted: Bool = true) {
+        self.ticker = ticker
+        self.date = date
+        self.adjusted = adjusted
+    }
+    
     var url: String {
         "https://api.polygon.io/v2/aggs/daily/\(date)/\(ticker)?adjusted=\(adjusted)&apiKey="
     }
 }
 
 struct PreviousClose: Path {
+    private let ticker: String
+    private var adjusted = true
+    
+    init(ticker: String, adjusted: Bool = true) {
+        self.ticker = ticker
+        self.adjusted = adjusted
+    }
+
     var url: String {
-        ""
+        "https://api.polygon.io/v2/aggs/ticker/\(ticker)/prev?adjusted=\(adjusted)&apiKey="
     }
 }
+
+struct Trades: Path {
+    private let ticker: String
+    private var timestamp: String?
+    private var order: String?
+    private var limit = 1000
+    
+    
+    var url: String {
+        "https://api.polygon.io/v2/aggs/ticker/\(ticker)/trades?apiKey="
+    }
+}
+
 
 
 //Responses
