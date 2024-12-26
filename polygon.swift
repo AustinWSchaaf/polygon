@@ -181,8 +181,6 @@ struct HTTP {
     }
 }
 
-
-let apiKey = "HREseYV_LZkvfIEVGxRrQq4QQPp8hfUj"
 let polygon = Polygon(apiKey: apiKey)
 do {
     let (data, response) = try await polygon.stocks.aggregates(ticker: "AAPL",
