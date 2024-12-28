@@ -5,7 +5,7 @@ struct Stocks {
         self.apiKey = apiKey
     }
     
-    func aggregates(ticker: String, multiplier: Int, timespan: String, from: String, to: String, adjusted: Bool = true,sort: String = "asc", limit: Int = 5000) async throws -> AggregatesResponse {
+    func aggregates(ticker: String, multiplier: Int, timespan: PolygonTimespan, from: String, to: String, adjusted: Bool = true,sort: String = "asc", limit: Int = 5000) async throws -> AggregatesResponse {
         let aggs = Aggregates(ticker: ticker,
                               multiplier: multiplier,
                               timespan: timespan,
