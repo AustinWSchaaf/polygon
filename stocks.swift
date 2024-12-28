@@ -27,13 +27,13 @@ struct Stocks {
     }
     
     
-    enum StockReponseTypes {
+    private enum StockReponseTypes {
         case aggregates(Aggregates)
         case groupedBars(GroupedBars)
         case dailyOpenClose(DailyOpenClose)
     }
     
-    func data(type: StockReponseTypes) async throws -> PolygonResponse {
+    private func data(type: StockReponseTypes) async throws -> PolygonResponse {
         switch type {
         case .aggregates(let aggs):
             let (data, response) = try await http.get(aggs.url)
