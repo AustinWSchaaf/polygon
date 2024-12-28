@@ -13,37 +13,19 @@ struct Stocks {
                               to: to,
                               adjusted: adjusted,
                               sort: sort, limit: limit)
-        return try await data(type: .aggregates(aggs)) as! AggregatesResponse
+        let (data, response) = try await http.get(aggs.url)
+        return try PolygonDecoder().decode(AggregatesResponse.self, from: data)
     }
     
     func groupedBars(date: String, adjusted: Bool = true, includeOTC: Bool = false) async throws -> GroupedBarsResponse {
         let groupedBars = GroupedBars(date: date, adjusted: adjusted, includeOTC: includeOTC)
-        return try await data(type: .groupedBars(groupedBars)) as! GroupedBarsResponse
+        let (data, response) = try await http.get(groupedBars.url)
+        return try PolygonDecoder().decode(GroupedBarsResponse.self, from: data)
     }
     
     func dailyOpenClose(ticker: String, date: String, adjusted: Bool = false) async throws -> DailyOpenCloseResponse {
         let dailyOpenClose = DailyOpenClose(ticker: ticker, date: date, adjusted: adjusted)
-        return try await data(type: .dailyOpenClose(dailyOpenClose)) as! DailyOpenCloseResponse
-    }
-    
-    
-    private enum StockReponseTypes {
-        case aggregates(Aggregates)
-        case groupedBars(GroupedBars)
-        case dailyOpenClose(DailyOpenClose)
-    }
-    
-    private func data(type: StockReponseTypes) async throws -> PolygonResponse {
-        switch type {
-        case .aggregates(let aggs):
-            let (data, response) = try await http.get(aggs.url)
-            return try PolygonDecoder().decode(AggregatesResponse.self, from: data)
-        case .groupedBars(let grouped):
-            let (data, response) = try await http.get(grouped.url)
-            return try PolygonDecoder().decode(GroupedBarsResponse.self, from: data)
-        case .dailyOpenClose(let daily):
-            let (data, response) = try await http.get(daily.url)
-            return try PolygonDecoder().decode(DailyOpenCloseResponse.self, from: data)
-        }
+        let (data, response) = try await http.get(dailyOpenClose.url)
+        return try PolygonDecoder().decode(DailyOpenCloseResponse.self, from: data)
     }
 }
